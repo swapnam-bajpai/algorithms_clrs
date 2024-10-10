@@ -27,12 +27,12 @@ public class Sorting {
         for (int idx = 1; idx < input.length; idx++) {
             key = result[idx];
             int prev = idx - 1;
-            //Shift the left subarray in 1:idx-1 forward until correct position for key is found
+            //Shift the left subarray in 0:idx-1 forward until correct position for key is found
             while (prev >= 0 && result[prev] > key) {
                 result[prev + 1] = result[prev];
                 prev = prev - 1;
             }
-            result[prev + 1] = key; //insert key at correct position, now 1:idx is sorted
+            result[prev + 1] = key; //insert key at correct position, now 0:idx is sorted
         }
 
         ArrayUtils.assertSorted(result);
@@ -54,12 +54,13 @@ public class Sorting {
     }
 
     private static int[] mergeSortInRange(int[] input, int start, int end) {
-        if (start >= end) { //base case
+        //base case, can be simplified to start == end if first call guaranteed to be (0, len-1) with len-1 >= 0
+        if (start >= end) {
             return input;
         }
 
         //recursively sort two halves and combine results
-        int mid = (start + end) / 2;
+        int mid = (start + end) / 2; //start <= mid < end
         mergeSortInRange(input, start, mid);
         mergeSortInRange(input, mid + 1, end);
 
