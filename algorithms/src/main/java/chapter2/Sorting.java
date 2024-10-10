@@ -2,23 +2,79 @@ package chapter2;
 
 import utils.ArrayUtils;
 import utils.PerformanceUtils;
+import utils.Utils;
 
 import java.util.Arrays;
 import java.util.function.Function;
 
+/**
+ * Sorting performances include time to initialize array, copy to new target array, assert correctness <br>
+ * Random, sorted and reverse sorted inputs are considered <br>
+ * Performance is averaged across multiple iterations, typically 100, unless individual cost is too large <br>
+ */
 public class Sorting {
 
     public static void printSortingPerformance(Function<int[], int[]> algorithm) {
-        PerformanceUtils.printPerformance(() -> algorithm.apply(ArrayUtils.getRandomArray(100_000)), 100_000, 100);
+        int dataSize = 100_000, iterations = 10;
+        PerformanceUtils.printPerformance(() -> algorithm.apply(ArrayUtils.getRandomArray(dataSize)), dataSize, iterations);
+    }
+
+    public static void printSortingPerformanceSorted(Function<int[], int[]> algorithm) {
+        int dataSize = 100_000, iterations = 50;
+        PerformanceUtils.printPerformance(() -> algorithm.apply(ArrayUtils.getSortedArray(dataSize)), dataSize, iterations);
+    }
+
+    public static void printSortingPerformanceReverseSorted(Function<int[], int[]> algorithm) {
+        int dataSize = 10_000_000, iterations = 100;
+        PerformanceUtils.printPerformance(() -> algorithm.apply(ArrayUtils.getReverseSortedArray(dataSize)), dataSize, iterations);
+    }
+
+    /**
+     * Given a sequence of integers, returns a new sorted sequence using bubble sort. <br>
+     * Terrible for random input <br>
+     * Bad even for sorted data, though small sizes are tolerable <br>
+     * Unsorted marginally worse than insertion sort <br>
+     * <br>
+     * Results for data size 10_000 : <br>
+     * Min execution time: 90 ms, 16, 33 <br>
+     * Max execution time: 121 ms, 37, 50 <br>
+     * Average execution time: 96.07 ms, 20.7, 40.2 <br>
+     * <br>
+     * Results for data size 100_000 : <br>
+     * Min execution time: 12160 ms, 1033, 2858 <br>
+     * Max execution time: 15444 ms, 2088, 3806 <br>
+     * Average execution time: 13373.4 ms, 1279.4, 3346.2 <br>
+     */
+    public static int[] bubbleSort(int[] input) {
+        var result = Arrays.copyOf(input, input.length);
+
+        for (int idx = 0; idx < result.length - 1; idx++) {
+            for (int j = result.length - 1; j > idx; j--) {
+                if (result[j] < result[j - 1]) { //bubble down smallest element in idx:len-1 to idx
+                    Utils.swapIndices(result, j, j - 1);
+                }
+            }
+        }
+
+        ArrayUtils.assertSorted(result);
+        return result;
     }
 
     /**
      * Given a sequence of integers, returns a new sorted sequence using insertion sort. <br>
-     * <p>
-     * Results for data size 100_000 and 100 iterations: <br>
-     * Min execution time: 687 ms <br>
-     * Max execution time: 1027 ms <br>
-     * Average execution time: 757.0 ms
+     * Best for sorted data, regardless of size <br>
+     * Decent for random data of small sizes <br>
+     * Unsorted marginally better than bubble sort <br>
+     * <br>
+     * Results for data size 10_000 : <br>
+     * Min execution time: 7 ms, 0, 18 <br>
+     * Max execution time: 18 ms, 2, 34 <br>
+     * Average execution time: 9.16 ms, 0.6, 25.9 <br>
+     * <br>
+     * Results for data size 100_000 : <br>
+     * Min execution time: 687 ms, 1, 1849 <br>
+     * Max execution time: 1027 ms, 8, 2321 <br>
+     * Average execution time: 757.0, 2.5, 2017.2 ms <br>
      */
     public static int[] insertionSort(int[] input) {
         var result = Arrays.copyOf(input, input.length);
@@ -41,11 +97,23 @@ public class Sorting {
 
     /**
      * Given a sequence of integers, returns a new sorted sequence using merge sort. <br>
-     * <p>
-     * Results for data size 100_000 and 100 iterations: <br>
-     * Min execution time: 11 ms <br>
-     * Max execution time: 27 ms <br>
-     * Average execution time: 13.51 ms
+     * Great performance for random data across sizes <br>
+     * Sorted/unsorted are almost same and somewhat faster than random. Consistent in general. <br>
+     * <br>
+     * Results for data size 10_000 : <br>
+     * Min execution time: 1 ms, 2, 1 <br>
+     * Max execution time: 5 ms, 6, 4 <br>
+     * Average execution time: 1.57 ms, 3.2, 2.1 <br>
+     * <br>
+     * Results for data size 100_000 : <br>
+     * Min execution time: 10 ms, 5, 5 <br>
+     * Max execution time: 27 ms, 20, 20 <br>
+     * Average execution time: 13.42 ms, 8.22, 8.32 <br>
+     * <br>
+     * Results for data size 10_000_000 : <br>
+     * Min execution time: 1320 ms, 515, 623 <br>
+     * Max execution time: 1746 ms, 874, 1177 <br>
+     * Average execution time: 1418.8 ms, 591, 679.68 <br>
      */
     public static int[] mergeSort(int[] input) {
         var result = mergeSortInRange(Arrays.copyOf(input, input.length), 0, input.length - 1);
