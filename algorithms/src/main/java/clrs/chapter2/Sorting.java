@@ -1,34 +1,11 @@
-package chapter2;
+package clrs.chapter2;
 
-import utils.ArrayUtils;
-import utils.PerformanceUtils;
-import utils.Utils;
+import clrs.utils.ArrayUtils;
+import clrs.utils.Utils;
 
 import java.util.Arrays;
-import java.util.function.Function;
 
-/**
- * Sorting performances include time to initialize array, copy to new target array, assert correctness <br>
- * Random, sorted and reverse sorted inputs are considered <br>
- * Performance is averaged across multiple iterations, typically 100, unless individual cost is too large <br>
- */
 public class Sorting {
-
-    public static void printSortingPerformance(Function<int[], int[]> algorithm) {
-        int dataSize = 100_000, iterations = 10;
-        PerformanceUtils.printPerformance(() -> algorithm.apply(ArrayUtils.getRandomArray(dataSize)), dataSize, iterations);
-    }
-
-    public static void printSortingPerformanceSorted(Function<int[], int[]> algorithm) {
-        int dataSize = 100_000, iterations = 50;
-        PerformanceUtils.printPerformance(() -> algorithm.apply(ArrayUtils.getSortedArray(dataSize)), dataSize, iterations);
-    }
-
-    public static void printSortingPerformanceReverseSorted(Function<int[], int[]> algorithm) {
-        int dataSize = 10_000_000, iterations = 100;
-        PerformanceUtils.printPerformance(() -> algorithm.apply(ArrayUtils.getReverseSortedArray(dataSize)), dataSize, iterations);
-    }
-
     /**
      * Given a sequence of integers, returns a new sorted sequence using bubble sort. <br>
      * Terrible for random input <br>

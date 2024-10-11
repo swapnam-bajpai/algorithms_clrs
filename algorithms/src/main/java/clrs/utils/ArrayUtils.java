@@ -1,4 +1,4 @@
-package utils;
+package clrs.utils;
 
 public final class ArrayUtils {
     /**

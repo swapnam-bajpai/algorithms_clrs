@@ -1,4 +1,4 @@
-package chapter2;
+package clrs.chapter2;
 
 public class Searching {
     /**

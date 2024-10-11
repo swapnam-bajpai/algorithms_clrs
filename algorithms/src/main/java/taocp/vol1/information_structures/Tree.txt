@@ -1,0 +1,7 @@
+A Tree is a finite set T of one of more nodes, recursively defined, such that :
+1. There is a specially designated node - root(T)
+2. m >= 0 disjoint subsets T1 ... Tm that are themselves trees (called subtrees) and form a partition of the remaining nodes of T
+
+Degree of a node - The number of subtrees of a node
+Leaf - Terminal node with degree 0
+Branch - Non-terminal node
